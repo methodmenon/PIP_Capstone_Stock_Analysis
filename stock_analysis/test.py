@@ -7,7 +7,7 @@ from authorization import AUTH_TOKEN
 def get_stock():
 	url = "https://www.quandl.com/api/v1/datasets/WIKI/TSLA.json?auth_token={auth_token}".format(auth_token=AUTH_TOKEN)
 	response = requests.get(url)
-	return json.dumps(response.json(), indent=4)
+	return response.json()
 
 
 def get_metadata():
@@ -23,9 +23,8 @@ def get_data_column():
 
 def main():
 	stock_data = get_stock()
-	#for entry in stock_data["data"]:
-	#	print entry["date"]
-	print stock_data
+	for entry in stock_data["data"]:
+		print [stock_data["code"], entry[0], entry[1], entry[4]]
 	#meta_data = get_metadata()
 	#print meta_data
 	#open_data = get_data_column()
