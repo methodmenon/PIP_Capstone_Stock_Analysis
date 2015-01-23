@@ -35,15 +35,15 @@ def seed():
 	url_5 = "https://www.quandl.com/api/v1/datasets/WIKI/XOM"
 	#stock 6 - Kraft (KRFT)
 	url_6 = "https://www.quandl.com/api/v1/datasets/WIKI/KRFT"
-	#stock 7 - GlaxoSmithKline (GSK)
-	url_7 = "https://www.quandl.com/api/v1/datasets/WIKI/GSK"
+	#stock 7 - Pfizer (PFE)
+	url_7 = "https://www.quandl.com/api/v1/datasets/WIKI/PFE"
 	#stock 8 - Wells Fargo and Company (WFC)
 	url_8 = "https://www.quandl.com/api/v1/datasets/WIKI/WFC"
 
 	#list of stock urls
 	#url_list = [url_1, url_2, url_3, url_4, url_5, url_6, url_7, url_8]
 	#6 urls seems to work max
-	url_list = [url_1, url_2, url_3, url_4, url_5, url_6]
+	url_list = [url_1, url_2, url_3, url_4, url_5, url_6, url_7, url_8]
 	for url in url_list:
 		response = requests.get(url)
 		stock_data = response.json()
