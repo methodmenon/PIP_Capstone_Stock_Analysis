@@ -1,0 +1,14 @@
+{% import "macros.html" as macros %}
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- Loop through the stocks -->
+{% for stock in stocks %}
+<!-- render each stock usin the render_stock macro -->
+{{ macros.render_stock(stock) }}
+<!-- end the loop -->
+{% endfor %}
+
+{% endblock %}

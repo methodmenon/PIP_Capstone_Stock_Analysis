@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+<!-- Form for stock selection -->
+
+{% block content %}
+
+<h2>Pick a Stock</h2>
+<p>Type the symbol of the stock you would like to add to my stocks for further analysis</p>
+
+<div class="stock-picks">
+    <div class="stock-pick-form">
+        <form class="enter-stock">
+            <label>
+            	Stock Symbol
+                <input type="text" name="stock-symbol" value="enter your symbol here">
+            </label>
+            <input class="btn" type="submit" name="add-stock-btn" value="Add to My Stocks">
+        </form>
+    </div>
+</div>
+
+{% endblock %}

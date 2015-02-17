@@ -6,4 +6,4 @@ config_path = os.environ.get("CONFIG_PATH", "stock_analysis.config.DevelopmentCo
 app.config.from_object(config_path)
 
 import api
-import views
+import filters

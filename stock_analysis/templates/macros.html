@@ -1,0 +1,10 @@
+<!-- Jinja macro used since stock will be rendered in a few different places -->
+
+<!-- Macro takes a single argument--> 
+<!-- When called, render stock name and the current price (to be done later) -->
+{% macro render_stock(stock) %}
+<div class="rendered-stock">
+	{{stock.stock_name|safe}}
+	<!-- add column for current stock price(if possible) later -->
+</div>
+{% endmacro %}

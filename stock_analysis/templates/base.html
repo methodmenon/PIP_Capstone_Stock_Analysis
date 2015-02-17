@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<!-- A base template which uses Bootstrap to provide teh basic styling and UI components -->
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <title>Stock Analysis</title>
+
+        <!-- CSS -->
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+        <!-- Blog -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+
+        <!-- JavaScript -->
+        <!-- jQuery -->
+        <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+        <!-- Bootstrap -->
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    </head>
+    
+    <!-- Static navbar at the top and bottom -->
+    <!-- Content block in between the navbars -->
+
+    <body>
+        <header class="primary-header container group">
+            <div class="logo">
+                <h1 id="main-title">
+                    <a href="index.html">Stock <br> Analysis</a>
+                </h1>
+            </div>
+            <div class="navbar-header">
+                <span class="navbar-link">Home</span>
+                <span class="navbar-link"><a href="mystocks.html">My Stocks</a></span>
+                <span class="navbar-link">My Graphs</span>
+            </div>
+        </header>
+        <section class="macros_container">
+            <!-- Thi is where the macro starts -->
+            {% block content %}{% endblock %}
+        </section>
+    </body>
+</html>
