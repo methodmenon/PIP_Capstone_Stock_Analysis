@@ -5,6 +5,7 @@ import json
 import mistune
 import models
 import decorators
+import Image
 from StringIO import StringIO
 
 from flask import render_template
@@ -32,11 +33,7 @@ def main_page():
 
 @app.route("/my_stocks")
 def view_my_stocks():
-
-	#stocks = session.query(Stock).filter_by((Stock.stock_name).distinct())
 	stocks = session.query(Stock.stock_name).group_by(Stock.stock_name).all()
-	#query = session.query(Stock.stock_name.distinct().label("stock_name"))
-	#stocks = [Stock.stock_name for stock in query.all()]
 	return render_template("my_stocks.html", 
 		stocks=stocks)
 
@@ -44,11 +41,28 @@ def view_my_stocks():
 #for MSFT at the moment
 def stock_closing_price_graph_first():
 	graph = closing_price_graph('MSFT')
-	return render_template("closing_price_graph", graph=graph)
 
-@app.route("/closing_price_graph.svg")
-def stock_closing_price_graph():
+#@app.route("/closing_price_graph.svg")
+@app.route("/closing_price_graph.png")
+def msft_stock_closing_price_graph():
 	graph = closing_price_graph('MSFT')
+	img = StringIO()
+	graph.savefig(img)
+	img.seek(0)
+	#return send_file(img, mimetype='image/svg+xml')
+	return send_file(img, mimetype='image/png')
+
+@app.route("/<symbol>/closing_price_graph.png")
+def stock_closing_price_graph_png(symbol):
+	graph = closing_price_graph(symbol)
+	img = StringIO()
+	graph.savefig(img)
+	img.seek(0)
+	return send_file(img, mimetype='image/png')
+
+@app.route("/<symbol>/closing_price_graph.svg")
+def stock_closing_price_graph_svg(symbol):
+	graph = closing_price_graph(symbol)
 	img = StringIO()
 	graph.savefig(img)
 	img.seek(0)
