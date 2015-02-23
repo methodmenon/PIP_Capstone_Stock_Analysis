@@ -7,7 +7,7 @@
 <!-- Loop through the stocks -->
 {% for stock in stocks %}
 <!-- render each stock usin the render_stock macro -->
-{{ macros.render_stock(stock) }}
+<input type="checkbox" name="stock">{{ macros.render_stock(stock) }}
 <!-- end the loop -->
 {% endfor %}
 
