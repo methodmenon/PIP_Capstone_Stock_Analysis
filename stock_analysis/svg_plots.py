@@ -3,6 +3,7 @@ import sys
 import psycopg2
 import models
 import matplotlib
+#matplotlib.use('SVG')
 import matplotlib.pyplot as plt
 
 
@@ -15,7 +16,7 @@ from stock_analysis import app
 from matplotlib.figure import Figure 
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
-def closing_price_graph(stock_symbol):
+def closing_price_graph_svg(stock_symbol):
 	query = session.query(Stock.date, Stock.close_price).filter(Stock.date > '01/01/2000').filter(Stock.stock_name == stock_symbol).order_by(Stock.date)
 
 	date, close_price = zip(*query.all())
@@ -36,4 +37,20 @@ def closing_price_graph(stock_symbol):
 	
 	canvas = FigureCanvas(fig)
 	return canvas
+
+"""
+def closing_price_graph_svg(stock_symbol):
+	query = session.query(Stock.date, Stock.close_price).filter(Stock.date > '01/01/2000').filter(Stock.stock_name == stock_symbol).order_by(Stock.date)
+
+	date, close_price = zip(*query.all())
+
+	fig = plt.figure()
+
+	plt.plot(date, close_price, label=stock_symbol)
+
+
+	plt.legend(loc='upper left')
+	plt.xlabel("Time")
+	plt.ylabel("Closing Price")
+	return plt"""
 

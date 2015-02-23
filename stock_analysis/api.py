@@ -6,14 +6,17 @@ import mistune
 import models
 import decorators
 import Image
-from StringIO import StringIO
+import cStringIO #more efficient version of StringIO module
+import StringIO
 
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from matplotlib.figure import Figure 
+from flask import Flask
 from flask import render_template
 from flask import send_file
 
-from flask import request, Response, url_for, redirect
+from flask import request, Response, url_for, redirect, make_response
 from flask import flash 
-#from werkzeug.utils import secure_filename
 from jsonschema import validate, ValidationError
 from sqlalchemy import and_, or_, distinct
 
@@ -24,6 +27,7 @@ from models import Stock
 from authorization import AUTH_TOKEN
 from stock_analysis import app
 from database import session
+
 
 from plots import closing_price_graph
 
@@ -37,33 +41,20 @@ def view_my_stocks():
 	return render_template("my_stocks.html", 
 		stocks=stocks)
 
-@app.route("/closing_price_graph.html")
-#for MSFT at the moment
-def stock_closing_price_graph_first():
-	graph = closing_price_graph('MSFT')
-
-#@app.route("/closing_price_graph.svg")
-@app.route("/closing_price_graph.png")
-def msft_stock_closing_price_graph():
-	graph = closing_price_graph('MSFT')
-	img = StringIO()
-	graph.savefig(img)
-	img.seek(0)
-	#return send_file(img, mimetype='image/svg+xml')
-	return send_file(img, mimetype='image/png')
+@app.route("/<symbol>/closing_price_graph.svg")
+def stock_closing_price_graph_svg(symbol):
+	canvas_svg = closing_price_graph(symbol)
+	svg_img = cStringIO.StringIO()
+	canvas_svg.print_svg(svg_img)
+	response = make_response(svg_img.getvalue())
+	response.headers['Content-Type'] = 'image/svg+xml'
+	return response
 
 @app.route("/<symbol>/closing_price_graph.png")
 def stock_closing_price_graph_png(symbol):
-	graph = closing_price_graph(symbol)
-	img = StringIO()
-	graph.savefig(img)
-	img.seek(0)
-	return send_file(img, mimetype='image/png')
-
-@app.route("/<symbol>/closing_price_graph.svg")
-def stock_closing_price_graph_svg(symbol):
-	graph = closing_price_graph(symbol)
-	img = StringIO()
-	graph.savefig(img)
-	img.seek(0)
-	return send_file(img, mimetype='image/svg+xml')
+	canvas_png = closing_price_graph(symbol)
+	png_img = cStringIO.StringIO()
+	canvas_png.print_png(png_img)
+	response = make_response(png_img.getvalue())
+	response.headers['Content-Type'] = 'image/png'
+	return response
