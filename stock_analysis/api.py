@@ -8,6 +8,7 @@ import decorators
 import Image
 import cStringIO #more efficient version of StringIO module
 import StringIO
+import mistune
 
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure 
@@ -31,12 +32,29 @@ from database import session
 
 from plots import closing_price_graph
 
-@app.route("/")
-def main_page():
+@app.route("/stock/add", methods=["GET"])
+def stock_add_get():
 	return render_template("stock_selection.html")
 
+@app.route("/stock/add", methods=["POST"])
+def stock_add_post():
+	symbol = request.form["add_stock"]
+
+	url ="https://www.quandl.com/api/v1/datasets/WIKI/{}".format(symbol)
+	print url
+	response = requests.get(url)
+	stock_data = response.json()
+	for entry in stock_data["data"]:
+		stock_day = Stock(stock_name=stock_data["code"], date=entry[0],
+			open_price=entry[1], close_price=entry[4])
+		session.add(stock_day)
+	session.commit()
+	stocks = session.query(Stock.stock_name).group_by(Stock.stock_name).all()
+	return redirect(url_for('my_stocks'))
+
+
 @app.route("/my_stocks")
-def view_my_stocks():
+def my_stocks():
 	stocks = session.query(Stock.stock_name).group_by(Stock.stock_name).all()
 	return render_template("my_stocks.html", 
 		stocks=stocks)
