@@ -59,7 +59,7 @@ h2 {
 
 .btn {
   border-radius: 5px;
-  color: #fff;
+  color: #808080;
   cursor: pointer;
   display: inline-block;
   font-weight: 400;
@@ -71,6 +71,10 @@ h2 {
 .stock_symbol_label {
   display: block;
   clear: both;
+}
+
+.stock-graph-button {
+  padding-top: 40px;
 }
 
 /*
