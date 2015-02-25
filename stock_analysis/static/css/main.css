@@ -79,6 +79,12 @@ h2 {
 
 .stock-graph-button {
   padding-top: 40px;
+  float: left;
+}
+
+.stock-remove-button {
+  padding-top: 40px;
+  float: right;
 }
 
 /*

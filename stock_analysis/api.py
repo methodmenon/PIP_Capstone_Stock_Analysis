@@ -38,9 +38,7 @@ def stock_add_get():
 
 @app.route("/stock/add", methods=["POST"])
 def stock_add_post():
-	print("Hello")
 	symbol = request.form["add_stock"]
-	print symbol
 
 	url ="https://www.quandl.com/api/v1/datasets/WIKI/{}".format(symbol)
 	response = requests.get(url)
@@ -60,6 +58,18 @@ def my_stocks():
 	stocks = session.query(Stock.stock_name).group_by(Stock.stock_name).all()
 	return render_template("my_stocks.html", 
 		stocks=stocks)
+
+@app.route("/my_stocks", methods=["GET", "POST"])
+def create_closing_price_graph():
+	if request.method == "POST":
+		symbol = request.form["stock"]
+		canvas_svg = closing_price_graph(symbol)
+		svg_img = cStringIO.StringIO()
+		canvas_svg.print_svg(svg_img)
+		response = make_response(svg_img.getvalue())
+		response.headers['Content-Type'] = 'image/svg+xml'
+		return response
+	
 
 @app.route("/<symbol>/closing_price_graph.svg")
 def stock_closing_price_graph_svg(symbol):

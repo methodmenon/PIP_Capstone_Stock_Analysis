@@ -5,16 +5,23 @@
 {% block content %}
 
 <!-- Loop through the stocks -->
+<form role="form" method="POST">
 {% for stock in stocks %}
 <!-- render each stock usin the render_stock macro -->
-<input type="checkbox" name="stock">{{ macros.render_stock(stock) }}
+    <input type="radio" name="stock" value="{{stock}}">{{ macros.render_stock(stock) }}
 <!-- end the loop -->
 {% endfor %}
 
-<div class="stock-graph-button">
-	<form class="stock-graph-form">
+    <div class="stock-graph-button">
 		<p> Please choose a stock to graph and click submit</p>
-        <input class="btn" type="submit" name="add-stock-btn" value="Graph Stock">
+        <input class="btn" type="submit" id="graph_stock" name="graph_stock" value="Graph Stock">
+    </div>
+</form>
+
+<div class="stock-remove-button">
+	<form class="stock-remove-form">
+		<p> Remove Stock</p>
+        <input class="btn" type="submit" name="remove-stock-btn" value="Remove Stock">
         </form>
     </div>
 </div>
