@@ -38,11 +38,13 @@ def stock_add_get():
 
 @app.route("/stock/add", methods=["POST"])
 def stock_add_post():
+	print("Hello")
 	symbol = request.form["add_stock"]
+	print symbol
 
 	url ="https://www.quandl.com/api/v1/datasets/WIKI/{}".format(symbol)
-	print url
 	response = requests.get(url)
+
 	stock_data = response.json()
 	for entry in stock_data["data"]:
 		stock_day = Stock(stock_name=stock_data["code"], date=entry[0],
