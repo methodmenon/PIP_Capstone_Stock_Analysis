@@ -9,6 +9,8 @@ import Image
 import cStringIO #more efficient version of StringIO module
 import StringIO
 import mistune
+import matplotlib
+import matplotlib.pyplot as plt
 
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure 
@@ -59,20 +61,20 @@ def my_stocks():
 	return render_template("my_stocks.html", 
 		stocks=stocks)
 
-@app.route("/my_stocks", methods=["GET", "POST"])
-def create_closing_price_graph():
-	if request.method == "POST":
-		symbol = request.form["stock"]
-		canvas_svg = closing_price_graph(symbol)
-		svg_img = cStringIO.StringIO()
-		canvas_svg.print_svg(svg_img)
-		response = make_response(svg_img.getvalue())
-		response.headers['Content-Type'] = 'image/svg+xml'
-		return response
-	
+@app.route("/my_stocks", methods=["GET"])
+def stock_closing_price_graph_get():
+	return render_template("my_stocks.html", stocks=stocks)
 
-@app.route("/<symbol>/closing_price_graph.svg")
+@app.route("/my_stocks", methods=["POST"])
+def stock_closing_price_graph_post():
+	symbol = request.form["stock"]
+	print symbol
+	return redirect(url_for("stock_closing_price_graph_svg", symbol=symbol))
+
+@app.route("/<symbol>/closing_price_graph.svg", methods=["GET", "POST"])
 def stock_closing_price_graph_svg(symbol):
+	print "hello"
+	print symbol
 	canvas_svg = closing_price_graph(symbol)
 	svg_img = cStringIO.StringIO()
 	canvas_svg.print_svg(svg_img)
