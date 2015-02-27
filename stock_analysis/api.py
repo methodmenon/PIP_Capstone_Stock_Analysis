@@ -67,8 +67,8 @@ def stock_closing_price_graph_get():
 
 @app.route("/my_stocks", methods=["POST"])
 def stock_closing_price_graph_post():
-	symbol = request.form["stock"]
-	print symbol
+	symbol = request.form["stock"].encode("ascii")
+	type(symbol)
 	return redirect(url_for("stock_closing_price_graph_svg", symbol=symbol))
 
 @app.route("/<symbol>/closing_price_graph.svg", methods=["GET", "POST"])
