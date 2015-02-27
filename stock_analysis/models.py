@@ -16,6 +16,7 @@ class Stock(Base):
 	date = Column(Date, nullable=False, primary_key=True)
 	open_price = Column(Float, nullable=False)
 	close_price = Column(Float, nullable=False)
+	#allows program to find data easier (especially for large databases)
 	__table_args__ = (Index('stock_date', "stock_name", "date"), )
 
 Base.metadata.create_all(engine)

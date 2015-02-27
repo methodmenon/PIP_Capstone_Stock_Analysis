@@ -8,7 +8,7 @@
 <form role="form" method="POST">
 {% for stock in stocks %}
 <!-- render each stock usin the render_stock macro -->
-    <input type="radio" name="stock" value="{{stock}}">{{ macros.render_stock(stock) }}
+    <input type="radio" name="stock" value="{{stock.stock_name}}">{{ macros.render_stock(stock) }}
 <!-- end the loop -->
 {% endfor %}
 
