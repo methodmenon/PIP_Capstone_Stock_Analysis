@@ -11,19 +11,38 @@
     <input type="radio" name="stock" value="{{stock.stock_name}}">{{ macros.render_stock(stock) }}
 <!-- end the loop -->
 {% endfor %}
-
+    <!--
     <div class="stock-graph-button">
 		<p> Please choose a stock to graph and click submit</p>
         <input class="btn" type="submit" id="graph_stock" name="graph_stock" value="Graph Stock">
-    </div>
-</form>
+    </div>-->
 
-<div class="stock-remove-button">
-	<form class="stock-remove-form">
+    <div class="stock-remove-button">
 		<p> Remove Stock</p>
         <input class="btn" type="submit" name="remove-stock-btn" value="Remove Stock">
-        </form>
     </div>
-</div>
 
+    <div class="user_query_input">
+        <h3 id="query_description">Please create your query for the type of graph you would like to plot for your selected stocks</h3>
+        <div class="date_query_one">
+            <h5>Start Date</h4>
+            <input type="date" name="start_date" value="">
+        </div>
+        <div class="date_query_two">
+            <h5>End Date</h4>
+            <input type="date" name="end_date" value="">
+        </div>
+        <div class="choice_query">
+            <h5>Choice Query</h5>
+            <select name="stock_property_value">
+                <option value="closing_price" selected>Closing Price</option>
+                <option value="opening_price">Opening Price</option>
+            </select>
+        </div>
+        <div class="stock-graph-button">
+            <p> Please choose a stock to graph and click submit</p>
+            <input class="btn" type="submit" id="graph_stock" name="graph_stock" value="Graph Stock">
+        </div>
+    </div>
+</form>
 {% endblock %}

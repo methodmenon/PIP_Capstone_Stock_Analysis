@@ -87,6 +87,10 @@ h2 {
   float: right;
 }
 
+.user_query_input h5 {
+  display: inline;
+}
+
 /*
   ========================================
   Primary header
@@ -126,4 +130,20 @@ Containers
   padding-top: 20px 0 10px 0;
   margin: 0 1.5% 24px 1.5%;
   text-align: center;
+}
+
+/*
+===================================================
+Divs
+====================================================
+*/
+
+.user_query_input {
+  padding-top: 20px;
+  clear: both;
+  color: #808080;
+}
+
+.user_query_input div {
+  padding-top: 10px;
 }

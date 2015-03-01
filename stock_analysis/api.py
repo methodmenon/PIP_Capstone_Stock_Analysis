@@ -10,6 +10,7 @@ import cStringIO #more efficient version of StringIO module
 import StringIO
 import mistune
 import matplotlib
+import datetime
 import matplotlib.pyplot as plt
 
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
@@ -17,11 +18,15 @@ from matplotlib.figure import Figure
 from flask import Flask
 from flask import render_template
 from flask import send_file
+from datetime import datetime
 
-from flask import request, Response, url_for, redirect, make_response
-from flask import flash 
+from flask import request, Response, url_for, redirect, make_response, flash
 from jsonschema import validate, ValidationError
 from sqlalchemy import and_, or_, distinct
+
+from flask.ext.wtf import Form 
+from wtforms.fields import DateField, RadioField, SelectField, StringField, SubmitField
+from wtforms.validators import Required
 
 
 import models
@@ -33,6 +38,10 @@ from database import session
 
 
 from plots import closing_price_graph
+
+class StockGraphForm(Form):
+	pass
+
 
 @app.route("/stock/add", methods=["GET"])
 def stock_add_get():
@@ -68,20 +77,37 @@ def stock_closing_price_graph_get():
 @app.route("/my_stocks", methods=["POST"])
 def stock_closing_price_graph_post():
 	symbol = request.form["stock"]
-	symbol[1]
-	type(symbol)
-	return redirect(url_for("stock_closing_price_graph_svg", symbol=symbol))
-
+	print (symbol)
+	start_date = request.form["start_date"]
+	##convert str into datetime object and use datetime.strptime to convert the string into a datetime object
+	start_date = datetime.strptime(start_date, "%Y-%m-%d")
+	#use datetime.strftime to convert the datetime object into a string in the specified format
+	start_date = start_date.strftime("%m/%d/%Y").decode('utf8')
+	print (start_date)
+	end_date = request.form["end_date"]
+	end_date = datetime.strptime(end_date, "%Y-%m-%d")
+	end_date = end_date.strftime("%m/%d/%Y").decode('utf8')
+	print (end_date)
+	#return redirect(url_for("stock_closing_price_graph_svg", symbol=symbol, start_date=start_date, end_date=end_date))
+	canvas_svg = closing_price_graph(symbol, start_date, end_date)
+	svg_img = cStringIO.StringIO()
+	canvas_svg.print_svg(svg_img)
+	response = make_response(svg_img.getvalue())
+	response.headers['Content-Type'] = 'image/svg+xml'
+	return response
+"""
 @app.route("/<symbol>/closing_price_graph.svg", methods=["GET", "POST"])
-def stock_closing_price_graph_svg(symbol):
-	print "hello"
+def stock_closing_price_graph_svg(symbol, start_date, end_date):
 	print symbol
+	print start_date
+	print end_date
 	canvas_svg = closing_price_graph(symbol)
 	svg_img = cStringIO.StringIO()
 	canvas_svg.print_svg(svg_img)
 	response = make_response(svg_img.getvalue())
 	response.headers['Content-Type'] = 'image/svg+xml'
 	return response
+"""
 
 @app.route("/<symbol>/closing_price_graph.png")
 def stock_closing_price_graph_png(symbol):
