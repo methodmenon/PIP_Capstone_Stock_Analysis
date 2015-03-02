@@ -52,7 +52,7 @@ def login_post():
 	username = request.form["username"]
 	password = request.form["password"]
 
-	user = session.query(User).filter(User.username==username).first()
+	user = session.query(User).filter_by(username=username).first()
 	#keep u lower case because it is for current user
 	if not user or not check_password_hash(user.password, password):
 		#flash function used to store a message which can be used when we render the next page
