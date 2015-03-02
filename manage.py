@@ -10,6 +10,10 @@ from stock_analysis import app
 from stock_analysis.models import Stock
 from stock_analysis.database import session
 
+from getpass import getpass
+from werkzeug.security import generate_password_hash
+from blog.models import User
+
 manager = Manager(app)
 
 @manager.command
@@ -54,5 +58,29 @@ def seed():
 			session.add(stock_day)
 		session.commit()
 
+@manager.command
+def adduser():
+    username = raw_input("username: ")
+    password = raw_input("password: ")
+    if session.query(User).filter_by(username=username).first():
+        print "User with that username already exists"
+        return
+    password = raw_input("Password: ")
+    password_2 = raw_input("Re-enter password: ")
+    while not (password and password_2) or password != password_2:
+         password = getpass("Password: ")
+         password_2 = getpass("Re-enter password: ")
+    user = User(username=username, email=password,
+        password=generate_password_hash(password))
+    """
+        generate_password_hash function: 
+        1) Function is used to hash our password
+        2) Hashing - process that converts our plain text password
+                     into a string of characters
+        3) Passwords use only One-Way-Hashes: process works in one direction
+    """
+    session.add(user)
+    session.commit()
+    
 if __name__ == "__main__":
 	manager.run()

@@ -25,7 +25,7 @@ from jsonschema import validate, ValidationError
 from sqlalchemy import and_, or_, distinct
 
 from flask.ext.wtf import Form 
-from wtforms.fields import DateField, RadioField, SelectField, StringField, SubmitField
+from wtforms.fields import DateField, RadioField, SelectField, StringField, SubmitField, PasswordField
 from wtforms.validators import Required
 
 
@@ -36,18 +36,35 @@ from authorization import AUTH_TOKEN
 from stock_analysis import app
 from database import session
 
+from flask.ext.login import login_user
+from werkzeug.security import check_password_hash
+from models import User
+
 
 from plots import closing_price_graph
 
-class StockGraphForm(Form):
-	pass
+@app.route("/login", methods=["GET"])
+def login_get():
+	return render_template("login.html")
+
+@app.route("/login", methods=["POST"])
+def login_post():
+	username = request.form["username"]
+	password = request.form["password"]
+
+	user = session.query(User).filter_by(username).first()
+	if not user or not check_password_hash(user.password, password):
+		#flash function used to store a message which can be used when we render the next page
+		flash("Incorrect username or password", "danger")
+		#redirect user back to the login
+		return redirect(url_for("login_get"))
 
 
-@app.route("/stock/add", methods=["GET"])
+@app.route("/stock_add", methods=["GET"])
 def stock_add_get():
 	return render_template("stock_selection.html")
 
-@app.route("/stock/add", methods=["POST"])
+@app.route("/stock_add", methods=["POST"])
 def stock_add_post():
 	symbol = request.form["add_stock"]
 
@@ -64,17 +81,17 @@ def stock_add_post():
 	return redirect(url_for('my_stocks'))
 
 
-@app.route("/my_stocks")
+@app.route("/")
 def my_stocks():
 	stocks = session.query(Stock.stock_name).group_by(Stock.stock_name).all()
 	return render_template("my_stocks.html", 
 		stocks=stocks)
 
-@app.route("/my_stocks", methods=["GET"])
+@app.route("/", methods=["GET"])
 def stock_closing_price_graph_get():
 	return render_template("my_stocks.html", stocks=stocks)
 
-@app.route("/my_stocks", methods=["POST"])
+@app.route("/", methods=["POST"])
 def stock_closing_price_graph_post():
 	symbol = request.form["stock"]
 	print (symbol)
