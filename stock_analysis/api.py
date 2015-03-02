@@ -52,12 +52,17 @@ def login_post():
 	username = request.form["username"]
 	password = request.form["password"]
 
-	user = session.query(User).filter_by(username).first()
+	user = session.query(User).filter(User.username==username).first()
+	#keep u lower case because it is for current user
 	if not user or not check_password_hash(user.password, password):
 		#flash function used to store a message which can be used when we render the next page
 		flash("Incorrect username or password", "danger")
 		#redirect user back to the login
 		return redirect(url_for("login_get"))
+
+	login_user(user)
+
+	return redirect(request.args.get('next') or url_for("my_stocks"))
 
 
 @app.route("/stock_add", methods=["GET"])
@@ -75,7 +80,8 @@ def stock_add_post():
 	for entry in stock_data["data"]:
 		stock_day = Stock(stock_name=stock_data["code"], date=entry[0],
 			open_price=entry[1], close_price=entry[4])
-		session.add(stock_day)
+		current_user.user_stock.append(stock_day)
+		session.add(User.user_stock)
 	session.commit()
 	stocks = session.query(Stock.stock_name).group_by(Stock.stock_name).all()
 	return redirect(url_for('my_stocks'))

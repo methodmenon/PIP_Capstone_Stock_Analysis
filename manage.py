@@ -12,7 +12,7 @@ from stock_analysis.database import session
 
 from getpass import getpass
 from werkzeug.security import generate_password_hash
-from blog.models import User
+from stock_analysis.models import User
 
 manager = Manager(app)
 
@@ -70,8 +70,7 @@ def adduser():
     while not (password and password_2) or password != password_2:
          password = getpass("Password: ")
          password_2 = getpass("Re-enter password: ")
-    user = User(username=username, email=password,
-        password=generate_password_hash(password))
+    user = User(username=username, password=generate_password_hash(password))
     """
         generate_password_hash function: 
         1) Function is used to hash our password
@@ -81,6 +80,6 @@ def adduser():
     """
     session.add(user)
     session.commit()
-    
+
 if __name__ == "__main__":
 	manager.run()
